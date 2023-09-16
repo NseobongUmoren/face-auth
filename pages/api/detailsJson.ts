@@ -1,6 +1,7 @@
-import { List } from '@/components/StudentDetails';
-import fs from 'fs/promises'; // Node.js filesystem module
+import path from 'path';
+import { promises as fs } from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { List } from '@/components/StudentDetails';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { query: { id } } = req;
@@ -9,8 +10,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    // Find the absolute path of the JSON directory
+    const jsonDirectory = path.join(process.cwd(), '');
+
     // Read the JSON file
-    const data = await fs.readFile(process.env.STUDENT_LIST || '', 'utf8');
+    const filePath = path.join(jsonDirectory, 'studentlist.json');
+    const data = await fs.readFile(filePath, 'utf8');
     const studentList = JSON.parse(data);
 
     // Find the student by ID

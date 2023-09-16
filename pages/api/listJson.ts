@@ -1,10 +1,15 @@
-import fs from 'fs/promises'; // Node.js filesystem module
+import path from 'path';
+import { promises as fs } from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    // Find the absolute path of the JSON file
+    const jsonDirectory = path.join(process.cwd(), '');
+    const filePath = path.join(jsonDirectory, 'studentlist.json');
+
     // Read the JSON file
-    const data = await fs.readFile(process.env.STUDENT_LIST || '', 'utf8');
+    const data = await fs.readFile(filePath, 'utf8');
     const studentList = JSON.parse(data);
 
     // Send the data as response
