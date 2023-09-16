@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Read the JSON file
-    const data = await fs.readFile('./studentlist.json', 'utf8');
+    const data = await fs.readFile('/studentlist.json', 'utf8');
     const studentList = JSON.parse(data);
 
     // Send the data as response

@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // Read the JSON file
-    const data = await fs.readFile('./studentlist.json', 'utf8');
+    const data = await fs.readFile('/studentlist.json', 'utf8');
     const studentList = JSON.parse(data);
 
     // Find the student by ID
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     studentList[studentIndex].capture = capture;
 
     // Write the updated data back to the JSON file
-    await fs.writeFile('./studentlist.json', JSON.stringify(studentList, null, 2), 'utf8');
+    await fs.writeFile('/studentlist.json', JSON.stringify(studentList, null, 2), 'utf8');
 
     res.status(200).json({ authenticated: true, message: 'Student information updated successfully' });
   } catch (error) {
