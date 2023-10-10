@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // Find the absolute path of the JSON directory
-    const jsonDirectory = path.join(process.cwd(), '');
+    const jsonDirectory = path.join(process.cwd(), 'public');
 
     // Read the JSON file
     const filePath = path.join(jsonDirectory, 'studentlist.json');
