@@ -21,21 +21,23 @@ const AdmissionList: React.FC = () => {
 
   // Update the filtered list based on the search input
   useEffect(() => {
-    const filtered = list.filter((item) => {
-      const searchText = searchInput.toLowerCase();
-      return (
-        item.name.toLowerCase().includes(searchText) ||
-        item.jambNo.toLowerCase().includes(searchText) ||
-        item.email.toLowerCase().includes(searchText) ||
-        item.phone.toLowerCase().includes(searchText)
-      );
-    });
-    setFilteredItems(filtered);
+    if (Array.isArray(list) && list.length > 0) {
+      const filtered = list.filter((item) => {
+        const searchText = searchInput.toLowerCase();
+        return (
+          item.name.toLowerCase().includes(searchText) ||
+          item.jambNo.toLowerCase().includes(searchText) ||
+          item.email.toLowerCase().includes(searchText) ||
+          item.phone.toLowerCase().includes(searchText)
+        );
+      });
+      setFilteredItems(filtered);
+    } 
   }, [searchInput, list]);
 
   useEffect(() => {
     // Fetch data from the server-side API route
-    fetch('/api/listJson')
+    fetch('/api/list')
       .then((response) => response.json())
       .then((res) => {
         setList(res);
@@ -57,7 +59,7 @@ const AdmissionList: React.FC = () => {
         />
       </div>
 
-      <table className="min-w-full table-auto rounded-xl overflow-clip">
+      {(Array.isArray(filteredItems) && filteredItems.length > 0) ? <table className="min-w-full table-auto rounded-xl overflow-clip">
         <thead>
           <tr className='bg-main-dark bg-opacity-20'>
             <th className="px-4 py-2 text-left"></th>
@@ -106,10 +108,10 @@ const AdmissionList: React.FC = () => {
                   </td>
                 </tr>
               )
-            })
+            }) 
           }
         </tbody>
-      </table>
+      </table> : <div className='text-center w-full'><i className='text-2xl'>Error fetching student list!!!</i></div>}
     </div>
   );
 };

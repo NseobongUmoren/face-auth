@@ -1,10 +1,10 @@
 import { createPool } from 'mysql2/promise';
 
 const dbConfig = {
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'face_auth',
+  host: 'https://redemptionfm.com',
+  user: 'redempt2_faceauth',
+  password: 'redempt2_faceauth',
+  database: 'redempt2_faceauth',
   port: 3306
 };
 

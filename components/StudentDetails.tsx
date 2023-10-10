@@ -25,7 +25,7 @@ const StudentDetails: React.FC = () => {
   useEffect(() => {
     if (id) {
       // Fetch studentData data based on the 'id' from your MySQL database here
-      fetch(`/api/detailsJson?id=${id}`)
+      fetch(`/api/details?id=${id}`)
         .then((response) => response.json())
         .then((data: { student: List }) => {
           setStudentData(data.student)
@@ -90,7 +90,7 @@ const StudentDetails: React.FC = () => {
   };
 
   const handleAuth = (status: number, compare: any, capture: string) => {
-    fetch('/api/authenticateJson?id='+id, {
+    fetch('/api/authenticate?id='+id, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
