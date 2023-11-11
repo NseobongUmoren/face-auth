@@ -1,16 +1,21 @@
 import { createPool } from 'mysql2/promise';
 import fs from 'fs'; // Node.js file system module
 
-const dbConfig = {
-  host: 'aws.connect.psdb.cloud',
-  user: 'zq5k01fngh0s84whq87n',
-  password: 'pscale_pw_XLGQwWOwvIYowNlo9aBl5bDQWs9U5gteQhq32hPxStg',
-  database: 'face-auth',
-  port: 3306,
-  ssl: {
-    ca: fs.readFileSync('/etc/pki/tls/certs/ca-bundle.crt'), // Replace with the path to your CA certificate
-  },
+const dbConfig:Record<string,any> = {
+  host: String(process.env.DATABASE_HOST),
+  user: String(process.env.DATABASE_USER),
+  password: String(process.env.DATABASE_PASSWORD),
+  database: String(process.env.DATABASE_NAME),
+  port: Number(process.env.DATABASE_PORT),
 };
+
+
+
+if (String(process.env.DATABASE_CA) !== '') {
+  dbConfig.ssl = {
+    ca: fs.readFileSync(String(process.env.DATABASE_CA)), // Replace with the path to your CA certificate
+  }
+}
 
 const pool = createPool(dbConfig);
 

@@ -22,6 +22,13 @@ const StudentDetails: React.FC = () => {
   const { id } = router.query;
   const [studentData, setStudentData] = useState<List | null>(null);
 
+  useEffect(()=>{
+    let timeout = setTimeout(()=>{
+      setFullLoading(false);
+      clearTimeout(timeout);
+    }, 500)
+  }, []);
+
   useEffect(() => {
     if (id) {
       // Fetch studentData data based on the 'id' from your MySQL database here
@@ -44,6 +51,7 @@ const StudentDetails: React.FC = () => {
   const [capt, setCapt] = useState('');
   const [authLevel, setAuthLevel] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [fullLoading, setFullLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [failedMessage, setFailedMessage] = useState('FACE MISMATCH:');
 
@@ -124,7 +132,11 @@ const StudentDetails: React.FC = () => {
 
   return (
     <div className="overflow-x-auto">
-      {studentData && (
+      {fullLoading ? (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-main-light"></div>
+        </div>
+      ) :studentData && (
         <>
           {studentData.status === 0 && (
             <div className='hidden md:block mb-6'>
@@ -153,7 +165,7 @@ const StudentDetails: React.FC = () => {
                   <img
                     src={studentData.photo}
                     alt={studentData.name}
-                    className="w-48 h-48 rounded-full"
+                    className="w-48 h-48 rounded-full object-contain"
                   />
                   {/* Authentication Badge */}
                   {studentData.status === 1 || authLevel === 3 ? (

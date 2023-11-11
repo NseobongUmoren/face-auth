@@ -7,6 +7,7 @@ const AdmissionList: React.FC = () => {
   const [list, setList] = useState<List[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [filteredItems, setFilteredItems] = useState<List[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter()
   const handleRowClick = (rowId:number) => {
@@ -32,6 +33,7 @@ const AdmissionList: React.FC = () => {
         );
       });
       setFilteredItems(filtered);
+      setLoading(false);
     } 
   }, [searchInput, list]);
 
@@ -59,59 +61,64 @@ const AdmissionList: React.FC = () => {
         />
       </div>
 
-      {(Array.isArray(filteredItems) && filteredItems.length > 0) ? <table className="min-w-full table-auto rounded-xl overflow-clip">
-        <thead>
-          <tr className='bg-main-dark bg-opacity-20'>
-            <th className="px-4 py-2 text-left"></th>
-            <th className="px-4 py-2 text-left hidden md:table-cell">Name</th>
-            <th className="px-4 py-2 text-left hidden md:table-cell">JAMB Number</th>
-            <th className="px-4 py-2 text-left hidden md:table-cell">Course Applied</th>
-            <th className="px-4 py-2 text-left hidden md:table-cell">Phone Number</th>
-            <th className="px-4 py-2 text-left hidden md:table-cell">Email</th>
-            <th className="px-4 py-2 text-left hidden md:table-cell">Gender</th>
-            <th className="px-4 py-2 text-left md:hidden"></th>
-            <th className="px-4 py-2 text-left md:hidden"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            filteredItems.map((item:List)=>{
-              return (
-                <tr key={item.id} onClick={() => handleRowClick(item.id)}
-                className={`cursor-pointer transition duration-200 first:rounded-s-xl ${
-                  selectedRow === item.id ? 'bg-main-dark odd:bg-main-dark odd:bg-opacity-100 text-white' : 'odd:bg-main-light odd:bg-opacity-10'
-                }`}>
-                  <td className="border-b w-20 px-4 py-4">
-                    <div className='h-12 w-12'>
-                      <img
-                        className="h-full w-full rounded-full object-contain"
-                        src={item.photo}
-                        alt="Your Company"
-                      />
-                    </div>
-                  </td>
-                  <td className="border-b px-4 py-2 hidden md:table-cell">{item.name}</td>
-                  <td className="border-b px-4 py-2 hidden md:table-cell">{item.jambNo}</td>
-                  <td className="border-b px-4 py-2 hidden md:table-cell">{item.course}</td>
-                  <td className="border-b px-4 py-2 hidden md:table-cell">{item.phone}</td>
-                  <td className="border-b px-4 py-2 hidden md:table-cell">{item.email}</td>
-                  <td className="border-b px-4 py-2 hidden md:table-cell">{item.gender === 1 ? "Male" : "Female"}</td>
-                  <td className="px-4 py-2 whitespace-nowrap text-xs md:hidden">
-                    <div className='border-b'><b>{item.name}</b></div>
-                    <div className='border-b'>{item.jambNo}</div>
-                    <div>{item.course}</div>
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-xs md:hidden">
-                    <div className='border-b'>{item.phone}</div>
-                    <div className='border-b'>{item.email}</div>
-                    <div>{item.gender === 1 ? "Male" : "Female"}</div>
-                  </td>
-                </tr>
-              )
-            }) 
-          }
-        </tbody>
-      </table> : <div className='text-center w-full'><i className='text-2xl'>Error fetching student list!!!</i></div>}
+      {loading ? (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-main-light"></div>
+        </div>
+      ) :
+        ((Array.isArray(filteredItems) && filteredItems.length > 0) ? <table className="min-w-full table-auto rounded-xl overflow-clip">
+          <thead>
+            <tr className='bg-main-dark bg-opacity-20'>
+              <th className="px-4 py-2 text-left"></th>
+              <th className="px-4 py-2 text-left hidden md:table-cell">Name</th>
+              <th className="px-4 py-2 text-left hidden md:table-cell">JAMB Number</th>
+              <th className="px-4 py-2 text-left hidden md:table-cell">Course Applied</th>
+              <th className="px-4 py-2 text-left hidden md:table-cell">Phone Number</th>
+              <th className="px-4 py-2 text-left hidden md:table-cell">Email</th>
+              <th className="px-4 py-2 text-left hidden md:table-cell">Gender</th>
+              <th className="px-4 py-2 text-left md:hidden"></th>
+              <th className="px-4 py-2 text-left md:hidden"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              filteredItems.map((item: List) => {
+                return (
+                  <tr key={item.id} onClick={() => handleRowClick(item.id)}
+                    className={`cursor-pointer transition duration-200 first:rounded-s-xl ${selectedRow === item.id ? 'bg-main-dark odd:bg-main-dark odd:bg-opacity-100 text-white' : 'odd:bg-main-light odd:bg-opacity-10'
+                      }`}>
+                    <td className="border-b w-20 px-4 py-4">
+                      <div className='h-12 w-12'>
+                        <img
+                          className="h-full w-full rounded-full object-contain"
+                          src={item.photo}
+                          alt="Your Company"
+                        />
+                      </div>
+                    </td>
+                    <td className="border-b px-4 py-2 hidden md:table-cell">{item.name}</td>
+                    <td className="border-b px-4 py-2 hidden md:table-cell">{item.jambNo}</td>
+                    <td className="border-b px-4 py-2 hidden md:table-cell">{item.course}</td>
+                    <td className="border-b px-4 py-2 hidden md:table-cell">{item.phone}</td>
+                    <td className="border-b px-4 py-2 hidden md:table-cell">{item.email}</td>
+                    <td className="border-b px-4 py-2 hidden md:table-cell">{item.gender === 1 ? "Male" : "Female"}</td>
+                    <td className="px-4 py-2 whitespace-nowrap text-xs md:hidden">
+                      <div className='border-b'><b>{item.name}</b></div>
+                      <div className='border-b'>{item.jambNo}</div>
+                      <div>{item.course}</div>
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap text-xs md:hidden">
+                      <div className='border-b'>{item.phone}</div>
+                      <div className='border-b'>{item.email}</div>
+                      <div>{item.gender === 1 ? "Male" : "Female"}</div>
+                    </td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table> : <div className='text-center w-full'><i className='text-2xl'>Error fetching student list!!!</i></div>)
+      }
     </div>
   );
 };
